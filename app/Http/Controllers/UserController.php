@@ -74,4 +74,18 @@ class UserController extends Controller
             return response()->json(['error'=>'이메일주소 또는 비밀번호를 확인해주세요'], 401);
         }
     }
+
+    /**
+     * Signout api
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function signout() {
+        $user = Auth::user();
+        $accessToken = $user->token();
+        $accessToken->revoke();
+        $accessToken->delete();
+        $success['message'] = '로그아웃 되었습니다.';
+        return response()->json(['success'=>$success], 200);
+    }
 }

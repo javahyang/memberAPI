@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'api' => [ // api 인증옵션을 passport 로 변경
+            'driver' => 'passport',
+            'provider' => 'users',
+        ]
     ],
 
     /*
