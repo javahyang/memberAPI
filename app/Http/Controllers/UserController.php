@@ -88,4 +88,15 @@ class UserController extends Controller
         $success['message'] = '로그아웃 되었습니다.';
         return response()->json(['success'=>$success], 200);
     }
+
+    /**
+     * Details api
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function details() {
+        $user = Auth::user();
+        $success['user'] = $user;
+        return response()->json(['success'=>$success], 200);
+    }
 }

@@ -19,4 +19,5 @@ Route::post('signup', [UserController::class, 'signup']);
 Route::post('signin', [UserController::class, 'signin']);
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('signout', [UserController::class, 'signout']);
+    Route::get('users/details', [UserController::class, 'details']);
 });
