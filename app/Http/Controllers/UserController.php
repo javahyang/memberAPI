@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 
 class UserController extends Controller
@@ -48,8 +49,29 @@ class UserController extends Controller
 
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $success['token'] =  $user->createToken('memberAPI')-> accessToken;
-        $success['user'] =  $user;
+        $success['token'] = $user->createToken('memberAPI')->accessToken;
+        $success['user'] = $user;
         return response()->json(['success'=>$success], 201);
+    }
+
+    /**
+     * Signin api
+     *
+     * @param  [string] email
+     * @param  [string] password
+     * @return \Illuminate\Http\Response
+     */
+    public function signin(Request $request) {
+        $input = $request->all();
+        if (Auth::attempt([
+            'email' => $input['email'],
+            'password' => $input['password']
+        ])) {
+            $user = Auth::user();
+            $success['token'] =  $user->createToken('memberAPI')->accessToken;
+            return response()->json(['success'=>$success], 200);
+        } else {
+            return response()->json(['error'=>'이메일주소 또는 비밀번호를 확인해주세요'], 401);
+        }
     }
 }
