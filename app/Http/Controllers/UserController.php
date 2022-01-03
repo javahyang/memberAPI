@@ -11,6 +11,28 @@ use Validator;
 class UserController extends Controller
 {
     /**
+     * @OA\Post(
+     *      path="/api/signup",
+     *      tags={"회원"},
+     *      summary="신규 회원가입",
+     *      description="회원가입 API",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/RequestSignup")
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="회원가입 후, token 과 user 를 반환합니다.",
+     *          @OA\JsonContent(ref="#/components/schemas/ResponseSignup")
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="정규식에 맞지 않는 필드명과 오류메시지를 반환합니다.",
+     *          @OA\JsonContent(ref="#/components/schemas/ResponseSignupInvalidData")
+     *      )
+     * )
+     */
+    /**
      * Signup api
      *
      * @param  [string] name

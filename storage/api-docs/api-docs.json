@@ -1,0 +1,279 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "member API",
+        "description": "member API 문서",
+        "contact": {
+            "email": "javahyang@email.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost",
+            "description": "로컬 테스트 서버"
+        }
+    ],
+    "paths": {
+        "/api/signup": {
+            "post": {
+                "tags": [
+                    "회원"
+                ],
+                "summary": "신규 회원가입",
+                "description": "회원가입 API",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RequestSignup"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "회원가입 후, token 과 user 를 반환합니다.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseSignup"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "정규식에 맞지 않는 필드명과 오류메시지를 반환합니다.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseSignupInvalidData"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "title": "User",
+                "description": "User 데이터",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "Id",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "title": "name",
+                        "description": "회원 이름",
+                        "type": "string",
+                        "example": "홍길동"
+                    },
+                    "email": {
+                        "title": "email",
+                        "description": "회원 이메일주소(아이디)",
+                        "type": "string",
+                        "example": "gildong@test.com"
+                    },
+                    "nickname": {
+                        "title": "nickname",
+                        "description": "닉네임",
+                        "type": "string",
+                        "example": "hongho"
+                    },
+                    "phone_number": {
+                        "title": "phone_number",
+                        "description": "전화번호",
+                        "type": "string",
+                        "example": "01012342345"
+                    },
+                    "gender": {
+                        "title": "gender",
+                        "description": "성별: 남성(M), 여성(F), null",
+                        "type": "string",
+                        "example": "M"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "User"
+                }
+            },
+            "RegexMessages": {
+                "title": "Regex Messages",
+                "description": "회원가입 입력 정규식 오류메시지 배열",
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "이름 정규식 오류메시지",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "이름은 한글, 영어 대문자/소문자 로 입력해주세요"
+                        }
+                    },
+                    "email": {
+                        "title": "email",
+                        "description": "이메일 정규식 오류메시지",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "이메일형식을 확인해주세요"
+                        }
+                    },
+                    "password": {
+                        "title": "password",
+                        "description": "비밀번호 정규식 오류메시지",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "비밀번호는 영어 대문자, 소문자, 특수문자(@^$!%*?&), 숫자가 각 1회 이상씩 포함된 10자리 이상이어야 합니다."
+                        }
+                    },
+                    "c_password": {
+                        "title": "c_password",
+                        "description": "비밀번호 확인 정규식 오류메시지",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "동일한 비밀번호를 입력해주세요"
+                        }
+                    },
+                    "nickname": {
+                        "title": "nickname",
+                        "description": "닉네임 정규식 오류메시지",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "닉네임은 영어 소문자 로 입력해주세요"
+                        }
+                    },
+                    "phone_number": {
+                        "title": "phone_number",
+                        "description": "전화번호 정규식 오류메시지",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "전화번호는 숫자만 입력해주세요"
+                        }
+                    },
+                    "gender": {
+                        "title": "gender",
+                        "description": "성별 정규식 오류메시지",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "올바른 타입을 입력해주세요: 남성(M), 여성(F)"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "RequestSignup": {
+                "title": "Request Signup",
+                "description": "회원가입 입력 데이터",
+                "required": [
+                    "name",
+                    "email",
+                    "password",
+                    "c_password",
+                    "nickname",
+                    "phone_number"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "이름: 한글, 영어 대문자/소문자",
+                        "type": "string",
+                        "example": "홍길동"
+                    },
+                    "email": {
+                        "title": "email",
+                        "description": "이메일주소: 이메일형식",
+                        "type": "string",
+                        "example": "gildong@test.com"
+                    },
+                    "password": {
+                        "title": "password",
+                        "description": "비밀번호: 영어 대문자, 소문자, 특수문자(@^$!%*?&), 숫자가 각 1회 이상씩 포함된 10자리 이상",
+                        "type": "string",
+                        "example": "Bawen&a1qq"
+                    },
+                    "c_password": {
+                        "title": "c_password",
+                        "description": "비밀번호 확인: password 필드와 같은 값",
+                        "type": "string",
+                        "example": "Bawen&a1qq"
+                    },
+                    "nickname": {
+                        "title": "nickname",
+                        "description": "닉네임: 영어 소문자",
+                        "type": "string",
+                        "example": "hongho"
+                    },
+                    "phone_number": {
+                        "title": "phone_number",
+                        "description": "전화번호: 숫자만",
+                        "type": "string",
+                        "example": "01012342345"
+                    },
+                    "gender": {
+                        "title": "gender",
+                        "description": "성별: 남성(M), 여성(F)",
+                        "type": "string",
+                        "example": "M"
+                    }
+                },
+                "type": "object"
+            },
+            "ResponseSignup": {
+                "title": "Response Signup",
+                "description": "회원가입 입력 데이터",
+                "properties": {
+                    "token": {
+                        "title": "token",
+                        "description": "엑세스 토큰값",
+                        "type": "string",
+                        "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDQ4ZWEzNWM2Mjg2YzcwNWI5ZWI5YTEyNTkxYzJjZjZhNjA2NWE2ZWIwNjQ2NjI1ZDIzNzY5NzBlYTg5YjYwYWQ3ZjY5OTA5MGEzODJiMzAiLCJpYXQiOjE2NDExOTM2NjEuMTcwOTg5LCJuYmYiOjE2NDExOTM2NjEuMTcwOTkyLCJleHAiOjE2NzI3Mjk2NjEuMTY4ODg3LCJzdWIiOiI4Iiwic2NvcGVzIjpbXX0.JvFn3iIvpN4iM8Jzg_3C6gQuwpIpFXf68YahKjAHz1Ts7czPwI4c5CqTEZ-89eoUKvMo2Zvs-JtdwQQU8QgD5pPFQhQCVeQNu6oNvNnA3-UeJICHTQ1ZbcZC1kYmzURvHCWJEyudqqESN_dDWIrSDLFGNx6zzIQnXUXPZY-iN2nmULrzFjlVgyCon6X0OVrgza-BWxDk7cGtCCvDZ5UIaWRPTxCqhZTUZ9cb0JZemghDTIykvubM9LRuEfTXlDBcRSnFz643gy6OmgimZZRoe7KA9tbc0d1XxcaiKkeHU_5kp3MYQwRFTqloNglXrs0JjIOcXBwViNBGlYV-fcjtfGZVMhH7EPxXc2BCRfS_JXDG4WvcuPWFtXpNn87Wnuyg1aN4uEoPF_gWF0kRseP166-7wVIzbpBx_dr4VNQj8-SMd0Laf2l7K2yPvZ4uQTQlxGjJp7xuxscufW5BaiHySQFna_28ei71f5C6IWto3YU5WdNJwt1rrRddhOiiEJQEO3258MeR53K3Vw0bl9b7BUOXNendHsl6piNPXIxtaOudD5I4FWBlStMTQKzy4J853_bNczCcC0H3IutCN9-QTOHwMs3CnMRXShwvJ_wFVBrkuLmauWEhFZyAExtZJUqcvGSSYzyVgVsYqjNhHAMzQLuCSE3eAkJYiKIzbG8OU5A"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    }
+                },
+                "type": "object"
+            },
+            "ResponseSignupInvalidData": {
+                "title": "Response Signup Invalid Data",
+                "description": "회원가입 입력 정규식 오류메시지",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/RegexMessages"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearer_token": {
+                "type": "apiKey",
+                "description": "입력형식: Bearer {{access_token}}",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}
