@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
+use App\Models\User;
+use App\Http\Resources\User as UserResource;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +24,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('signout', [UserController::class, 'signout']);
     Route::get('users/details', [UserController::class, 'details']);
     Route::get('orders/details', [OrderController::class, 'details']);
+});
+Route::get('users', function() {
+    return UserResource::collection(User::paginate(config('app.per_page')));
 });
