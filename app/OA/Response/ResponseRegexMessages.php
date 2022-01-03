@@ -1,6 +1,6 @@
 <?php
 
-namespace App\OA;
+namespace App\OA\Response;
 
 /**
  * @OA\Schema(
@@ -10,7 +10,7 @@ namespace App\OA;
  * )
  */
 
- class RegexMessages
+ class ResponseRegexMessages
  {
     /**
      * @OA\Property(

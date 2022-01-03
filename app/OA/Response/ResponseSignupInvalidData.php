@@ -16,7 +16,7 @@ namespace App\OA\Response;
      * @OA\Property(
      *      title="error",
      *      description="오류메시지 배열",
-     *      ref="#/components/schemas/RegexMessages"
+     *      ref="#/components/schemas/ResponseRegexMessages"
      * )
      *
      * @var array

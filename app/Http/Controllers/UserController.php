@@ -77,6 +77,28 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *      path="/api/signin",
+     *      tags={"회원"},
+     *      summary="로그인",
+     *      description="로그인 API",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/RequestSignin")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="로그인 후, token 을 반환합니다.",
+     *          @OA\JsonContent(ref="#/components/schemas/ResponseSignin")
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="로그인 정보 오류메시지를 반환합니다.",
+     *          @OA\JsonContent(ref="#/components/schemas/ResponseSigninInvalidData")
+     *      )
+     * )
+     */
+    /**
      * Signin api
      *
      * @param  [string] email

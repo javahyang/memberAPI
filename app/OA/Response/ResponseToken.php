@@ -4,15 +4,15 @@ namespace App\OA\Response;
 
 /**
  * @OA\Schema(
- *      title="Response Signup",
- *      description="회원가입 입력 데이터",
+ *      title="Response Token",
+ *      description="로그인 후 발급되는 엑세스 토큰",
  *      type="object"
  * )
  */
 
- class ResponseSignup
+ class ResponseToken
  {
-    /**
+     /**
      * @OA\Property(
      *      title="token",
      *      description="엑세스 토큰값",
@@ -22,15 +22,4 @@ namespace App\OA\Response;
      * @var string
      */
     public $token;
-
-     /**
-     * @OA\Property(
-     *      title="user",
-     *      description="가입된 회원정보",
-     *      ref="#/components/schemas/User"
-     * )
-     *
-     * @var array
-     */
-    public $user;
  }
