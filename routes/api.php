@@ -25,6 +25,4 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('users/details', [UserController::class, 'details']);
     Route::get('orders/details', [OrderController::class, 'details']);
 });
-Route::get('users', function() {
-    return UserResource::collection(User::paginate(config('app.per_page')));
-});
+Route::match(['get', 'post'], 'users', [UserController::class, 'list']);

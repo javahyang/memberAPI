@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Http\Resources\User as UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -142,5 +143,22 @@ class UserController extends Controller
         $user = Auth::user();
         $success['user'] = $user;
         return response()->json(['success'=>$success], 200);
+    }
+
+    public function list(Request $request) {
+        $input = $request->all();
+
+        if (!empty($input['name']) && !empty($input['email'])) {
+            return UserResource::collection(User::where([
+                ['name', '=', $input['name']],
+                ['email', '=', $input['email']]
+            ])->get());
+        } else if (!empty($input['name'])) {
+            return UserResource::collection(User::where('name',$input['name'])->get());
+        } else if (!empty($input['email'])) {
+            return UserResource::collection(User::where('email',$input['email'])->get());
+        } else {
+            return UserResource::collection(User::paginate(config('app.per_page')));
+        }
     }
 }
