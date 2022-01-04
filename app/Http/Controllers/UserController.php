@@ -108,6 +108,19 @@ class UserController extends Controller
      */
     public function signin(Request $request) {
         $input = $request->all();
+        $rules = [
+            'email' => ['required'],
+            'password' => ['required'],
+        ];
+        $message = [
+            'email.required' => '이메일을 입력해주세요',
+            'password.required' => '비밀번호를 입력해주세요',
+        ];
+        $validator = Validator::make($input, $rules, $message);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 401);
+        }
+
         if (Auth::attempt([
             'email' => $input['email'],
             'password' => $input['password']
@@ -147,6 +160,18 @@ class UserController extends Controller
 
     public function list(Request $request) {
         $input = $request->all();
+        $rules = [
+            'name' => ['nullable', 'regex:/^[가-힣|a-z|A-Z]+$/'],
+            'email' => ['nullable', 'email:filter'],
+        ];
+        $message = [
+            'name.regex' => '이름은 한글, 영어 대문자/소문자 로 입력해주세요',
+            'email.email' => '이메일형식을 확인해주세요',
+        ];
+        $validator = Validator::make($input, $rules, $message);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 401);
+        }
 
         if (!empty($input['name']) && !empty($input['email'])) {
             return UserResource::collection(User::where([
