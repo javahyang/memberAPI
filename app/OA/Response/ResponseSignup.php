@@ -5,7 +5,7 @@ namespace App\OA\Response;
 /**
  * @OA\Schema(
  *      title="Response Signup",
- *      description="회원가입 입력 데이터",
+ *      description="회원가입 응답 데이터",
  *      type="object"
  * )
  */

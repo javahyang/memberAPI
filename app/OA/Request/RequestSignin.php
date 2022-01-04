@@ -5,7 +5,7 @@ namespace App\OA\Request;
 /**
  * @OA\Schema(
  *      title="Request Signin",
- *      description="로그인 입력 데이터",
+ *      description="로그인 요청 데이터",
  *      type="object"
  * )
  */

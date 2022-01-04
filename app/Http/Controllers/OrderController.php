@@ -8,14 +8,33 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
+    /**
+     * @OA\Get(
+     *      path="/api/orders/details",
+     *      tags={"주문"},
+     *      summary="주문 목록조회",
+     *      description="로그인한 회원의 주문 목록조회 API",
+     *      security={ {"bearer_token": {} }},
+     *      @OA\Response(
+     *          response=200,
+     *          description="로그인한 회원의 주문 목록을 반환합니다.",
+     *          @OA\JsonContent(ref="#/components/schemas/ResponseOrdersDetails")
+     *      )
+     * )
+     */
+    /**
+     * Orders details api
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function details()
     {
         $user = Auth::user();
         $email = $user->email;
-        $success['user'] = $user;
-        $success['orders'] = Order::where('email', $email)
+        $result['user'] = $user;
+        $result['orders'] = Order::where('email', $email)
                                 ->orderBy('paid_at', 'desc')
                                 ->get();
-        return response()->json(['success' => $success], 200);
+        return response()->json($result, 200);
     }
 }

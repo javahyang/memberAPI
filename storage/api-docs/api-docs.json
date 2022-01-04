@@ -19,6 +19,32 @@
         }
     ],
     "paths": {
+        "/api/orders/details": {
+            "get": {
+                "tags": [
+                    "주문"
+                ],
+                "summary": "주문 목록조회",
+                "description": "로그인한 회원의 주문 목록조회 API",
+                "responses": {
+                    "200": {
+                        "description": "로그인한 회원의 주문 목록을 반환합니다.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseOrdersDetails"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
         "/api/signup": {
             "post": {
                 "tags": [
@@ -47,7 +73,7 @@
                             }
                         }
                     },
-                    "401": {
+                    "400": {
                         "description": "정규식에 맞지 않는 필드명과 오류메시지를 반환합니다.",
                         "content": {
                             "application/json": {
@@ -88,12 +114,134 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "정규식에 맞지 않는 필드명과 오류메시지를 반환합니다.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseSigninInvalidData"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "로그인 정보 오류메시지를 반환합니다.",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ResponseSigninInvalidData"
+                                    "$ref": "#/components/schemas/ResponseSigninFail"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/signout": {
+            "get": {
+                "tags": [
+                    "회원"
+                ],
+                "summary": "로그아웃",
+                "description": "로그아웃 API",
+                "responses": {
+                    "200": {
+                        "description": "로그아웃 메시지를 반환합니다.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseSignout"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/users/details": {
+            "get": {
+                "tags": [
+                    "회원"
+                ],
+                "summary": "회원 상세정보 조회",
+                "description": "회원 상세정보 조회 API",
+                "responses": {
+                    "200": {
+                        "description": "로그인한 회원정보를 반환합니다.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseUsersDetails"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "회원"
+                ],
+                "summary": "회원목록",
+                "description": "회원목록 조회 API",
+                "responses": {
+                    "200": {
+                        "description": "회원목록을 반환합니다.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseUsers"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "회원"
+                ],
+                "summary": "회원목록",
+                "description": "회원목록 조회 API",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RequestUsers"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "이름, 이메일로 검색한 회원정보를 반환합니다.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseUsers"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "정규식에 맞지 않는 필드명과 오류메시지를 반환합니다.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseUsersInvalidData"
                                 }
                             }
                         }
@@ -104,6 +252,48 @@
     },
     "components": {
         "schemas": {
+            "Order": {
+                "title": "Order",
+                "description": "Order 데이터",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "Id",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "email": {
+                        "title": "email",
+                        "description": "회원 이메일주소(아이디)",
+                        "type": "string",
+                        "example": "gildong@test.com"
+                    },
+                    "order_number": {
+                        "title": "order_number",
+                        "description": "주문번호",
+                        "type": "string",
+                        "example": "QMAYTOPQN6R0"
+                    },
+                    "product_name": {
+                        "title": "product_name",
+                        "description": "제품명",
+                        "type": "string",
+                        "example": "수제 인센스 홀더 🦉"
+                    },
+                    "paid_at": {
+                        "title": "paid_at",
+                        "description": "결제일시",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-03-12T10:01:57.000000Z"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Order"
+                }
+            },
             "User": {
                 "title": "User",
                 "description": "User 데이터",
@@ -153,7 +343,7 @@
             },
             "RequestSignin": {
                 "title": "Request Signin",
-                "description": "로그인 입력 데이터",
+                "description": "로그인 요청 데이터",
                 "properties": {
                     "email": {
                         "title": "email",
@@ -172,7 +362,7 @@
             },
             "RequestSignup": {
                 "title": "Request Signup",
-                "description": "회원가입 입력 데이터",
+                "description": "회원가입 요청 데이터",
                 "required": [
                     "name",
                     "email",
@@ -227,9 +417,46 @@
                 },
                 "type": "object"
             },
+            "RequestUsers": {
+                "title": "Request Users",
+                "description": "회원검색 요청 데이터",
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "이름: 한글, 영어 대문자/소문자",
+                        "type": "string",
+                        "example": "홍길동"
+                    },
+                    "email": {
+                        "title": "email",
+                        "description": "이메일주소: 이메일형식",
+                        "type": "string",
+                        "example": "gildong@test.com"
+                    }
+                },
+                "type": "object"
+            },
+            "ResponseOrdersDetails": {
+                "title": "Response Orders Details",
+                "description": "주문목록 응답 데이터",
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "orders": {
+                        "title": "orders",
+                        "description": "회원의 주문목록(결제일시 최신순)",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Order"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "ResponseRegexMessages": {
-                "title": "Regex Messages",
-                "description": "회원가입 입력 정규식 오류메시지 배열",
+                "title": "Response Regex Messages",
+                "description": "회원가입 요청값 정규식 오류메시지 배열",
                 "properties": {
                     "name": {
                         "title": "name",
@@ -299,16 +526,19 @@
             },
             "ResponseSignin": {
                 "title": "Response Signin",
-                "description": "로그인 성공",
+                "description": "로그인 응답 데이터",
                 "properties": {
-                    "success": {
-                        "$ref": "#/components/schemas/ResponseToken"
+                    "token": {
+                        "title": "token",
+                        "description": "엑세스 토큰값",
+                        "type": "string",
+                        "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDQ4ZWEzNWM2Mjg2YzcwNWI5ZWI5YTEyNTkxYzJjZjZhNjA2NWE2ZWIwNjQ2NjI1ZDIzNzY5NzBlYTg5YjYwYWQ3ZjY5OTA5MGEzODJiMzAiLCJpYXQiOjE2NDExOTM2NjEuMTcwOTg5LCJuYmYiOjE2NDExOTM2NjEuMTcwOTkyLCJleHAiOjE2NzI3Mjk2NjEuMTY4ODg3LCJzdWIiOiI4Iiwic2NvcGVzIjpbXX0.JvFn3iIvpN4iM8Jzg_3C6gQuwpIpFXf68YahKjAHz1Ts7czPwI4c5CqTEZ-89eoUKvMo2Zvs-JtdwQQU8QgD5pPFQhQCVeQNu6oNvNnA3-UeJICHTQ1ZbcZC1kYmzURvHCWJEyudqqESN_dDWIrSDLFGNx6zzIQnXUXPZY-iN2nmULrzFjlVgyCon6X0OVrgza-BWxDk7cGtCCvDZ5UIaWRPTxCqhZTUZ9cb0JZemghDTIykvubM9LRuEfTXlDBcRSnFz643gy6OmgimZZRoe7KA9tbc0d1XxcaiKkeHU_5kp3MYQwRFTqloNglXrs0JjIOcXBwViNBGlYV-fcjtfGZVMhH7EPxXc2BCRfS_JXDG4WvcuPWFtXpNn87Wnuyg1aN4uEoPF_gWF0kRseP166-7wVIzbpBx_dr4VNQj8-SMd0Laf2l7K2yPvZ4uQTQlxGjJp7xuxscufW5BaiHySQFna_28ei71f5C6IWto3YU5WdNJwt1rrRddhOiiEJQEO3258MeR53K3Vw0bl9b7BUOXNendHsl6piNPXIxtaOudD5I4FWBlStMTQKzy4J853_bNczCcC0H3IutCN9-QTOHwMs3CnMRXShwvJ_wFVBrkuLmauWEhFZyAExtZJUqcvGSSYzyVgVsYqjNhHAMzQLuCSE3eAkJYiKIzbG8OU5A"
                     }
                 },
                 "type": "object"
             },
-            "ResponseSigninInvalidData": {
-                "title": "Response Signin Invalid Data",
+            "ResponseSigninFail": {
+                "title": "Response Signin Fail",
                 "description": "로그인 정보 오류메시지",
                 "properties": {
                     "error": {
@@ -320,9 +550,57 @@
                 },
                 "type": "object"
             },
+            "ResponseSigninInvalidData": {
+                "title": "Response Signin Invalid Data",
+                "description": "로그인 요청값 정규식 오류메시지",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/ResponseSigninRegexMessages"
+                    }
+                },
+                "type": "object"
+            },
+            "ResponseSigninRegexMessages": {
+                "title": "Response Signin Regex Messages",
+                "description": "로그인 요청값 정규식 오류메시지 배열",
+                "properties": {
+                    "email": {
+                        "title": "email",
+                        "description": "이메일 정규식 오류메시지",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "이메일형식을 확인해주세요"
+                        }
+                    },
+                    "password": {
+                        "title": "password",
+                        "description": "비밀번호 정규식 오류메시지",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "비밀번호는 영어 대문자, 소문자, 특수문자(@^$!%*?&), 숫자가 각 1회 이상씩 포함된 10자리 이상이어야 합니다."
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ResponseSignout": {
+                "title": "Response Signout",
+                "description": "로그아웃 응답 데이터",
+                "properties": {
+                    "message": {
+                        "title": "message",
+                        "description": "응답메시지",
+                        "type": "string",
+                        "example": "로그아웃 되었습니다."
+                    }
+                },
+                "type": "object"
+            },
             "ResponseSignup": {
                 "title": "Response Signup",
-                "description": "회원가입 입력 데이터",
+                "description": "회원가입 응답 데이터",
                 "properties": {
                     "token": {
                         "title": "token",
@@ -338,7 +616,7 @@
             },
             "ResponseSignupInvalidData": {
                 "title": "Response Signup Invalid Data",
-                "description": "회원가입 입력 정규식 오류메시지",
+                "description": "회원가입 요청값 정규식 오류메시지",
                 "properties": {
                     "error": {
                         "$ref": "#/components/schemas/ResponseRegexMessages"
@@ -346,15 +624,62 @@
                 },
                 "type": "object"
             },
-            "ResponseToken": {
-                "title": "Response Token",
-                "description": "로그인 후 발급되는 엑세스 토큰",
+            "ResponseUsers": {
+                "title": "Response Users",
+                "description": "회원목록",
                 "properties": {
-                    "token": {
-                        "title": "token",
-                        "description": "엑세스 토큰값",
-                        "type": "string",
-                        "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDQ4ZWEzNWM2Mjg2YzcwNWI5ZWI5YTEyNTkxYzJjZjZhNjA2NWE2ZWIwNjQ2NjI1ZDIzNzY5NzBlYTg5YjYwYWQ3ZjY5OTA5MGEzODJiMzAiLCJpYXQiOjE2NDExOTM2NjEuMTcwOTg5LCJuYmYiOjE2NDExOTM2NjEuMTcwOTkyLCJleHAiOjE2NzI3Mjk2NjEuMTY4ODg3LCJzdWIiOiI4Iiwic2NvcGVzIjpbXX0.JvFn3iIvpN4iM8Jzg_3C6gQuwpIpFXf68YahKjAHz1Ts7czPwI4c5CqTEZ-89eoUKvMo2Zvs-JtdwQQU8QgD5pPFQhQCVeQNu6oNvNnA3-UeJICHTQ1ZbcZC1kYmzURvHCWJEyudqqESN_dDWIrSDLFGNx6zzIQnXUXPZY-iN2nmULrzFjlVgyCon6X0OVrgza-BWxDk7cGtCCvDZ5UIaWRPTxCqhZTUZ9cb0JZemghDTIykvubM9LRuEfTXlDBcRSnFz643gy6OmgimZZRoe7KA9tbc0d1XxcaiKkeHU_5kp3MYQwRFTqloNglXrs0JjIOcXBwViNBGlYV-fcjtfGZVMhH7EPxXc2BCRfS_JXDG4WvcuPWFtXpNn87Wnuyg1aN4uEoPF_gWF0kRseP166-7wVIzbpBx_dr4VNQj8-SMd0Laf2l7K2yPvZ4uQTQlxGjJp7xuxscufW5BaiHySQFna_28ei71f5C6IWto3YU5WdNJwt1rrRddhOiiEJQEO3258MeR53K3Vw0bl9b7BUOXNendHsl6piNPXIxtaOudD5I4FWBlStMTQKzy4J853_bNczCcC0H3IutCN9-QTOHwMs3CnMRXShwvJ_wFVBrkuLmauWEhFZyAExtZJUqcvGSSYzyVgVsYqjNhHAMzQLuCSE3eAkJYiKIzbG8OU5A"
+                    "data": {
+                        "title": "data",
+                        "description": "회원목록",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ResponseUsersDetails": {
+                "title": "Response Users Details",
+                "description": "회원 상세정보",
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    }
+                },
+                "type": "object"
+            },
+            "ResponseUsersInvalidData": {
+                "title": "Response Users Invalid Data",
+                "description": "회원검색 요청값 정규식 오류메시지",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/ResponseUsersRegexMessages"
+                    }
+                },
+                "type": "object"
+            },
+            "ResponseUsersRegexMessages": {
+                "title": "Response Users Regex Messages",
+                "description": "회원검색 요청값 정규식 오류메시지 배열",
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "이름 정규식 오류메시지",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "이름은 한글, 영어 대문자/소문자 로 입력해주세요"
+                        }
+                    },
+                    "email": {
+                        "title": "email",
+                        "description": "이메일 정규식 오류메시지",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": "이메일형식을 확인해주세요"
+                        }
                     }
                 },
                 "type": "object"

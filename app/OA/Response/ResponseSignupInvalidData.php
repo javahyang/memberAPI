@@ -5,7 +5,7 @@ namespace App\OA\Response;
 /**
  * @OA\Schema(
  *      title="Response Signup Invalid Data",
- *      description="회원가입 입력 정규식 오류메시지",
+ *      description="회원가입 요청값 정규식 오류메시지",
  *      type="object"
  * )
  */

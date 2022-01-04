@@ -27,7 +27,7 @@ class UserController extends Controller
      *          @OA\JsonContent(ref="#/components/schemas/ResponseSignup")
      *      ),
      *      @OA\Response(
-     *          response=401,
+     *          response=400,
      *          description="정규식에 맞지 않는 필드명과 오류메시지를 반환합니다.",
      *          @OA\JsonContent(ref="#/components/schemas/ResponseSignupInvalidData")
      *      )
@@ -67,14 +67,14 @@ class UserController extends Controller
         ];
         $validator = Validator::make($input, $rules, $message);
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error'=>$validator->errors()], 400);
         }
 
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $success['token'] = $user->createToken('memberAPI')->accessToken;
-        $success['user'] = $user;
-        return response()->json(['success'=>$success], 201);
+        $result['token'] = $user->createToken('memberAPI')->accessToken;
+        $result['user'] = $user;
+        return response()->json($result, 201);
     }
 
     /**
@@ -93,9 +93,14 @@ class UserController extends Controller
      *          @OA\JsonContent(ref="#/components/schemas/ResponseSignin")
      *      ),
      *      @OA\Response(
+     *          response=400,
+     *          description="정규식에 맞지 않는 필드명과 오류메시지를 반환합니다.",
+     *          @OA\JsonContent(ref="#/components/schemas/ResponseSigninInvalidData")
+     *      ),
+     *      @OA\Response(
      *          response=401,
      *          description="로그인 정보 오류메시지를 반환합니다.",
-     *          @OA\JsonContent(ref="#/components/schemas/ResponseSigninInvalidData")
+     *          @OA\JsonContent(ref="#/components/schemas/ResponseSigninFail")
      *      )
      * )
      */
@@ -118,7 +123,7 @@ class UserController extends Controller
         ];
         $validator = Validator::make($input, $rules, $message);
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error'=>$validator->errors()], 400);
         }
 
         if (Auth::attempt([
@@ -126,13 +131,27 @@ class UserController extends Controller
             'password' => $input['password']
         ])) {
             $user = Auth::user();
-            $success['token'] =  $user->createToken('memberAPI')->accessToken;
-            return response()->json(['success'=>$success], 200);
+            $result['token'] =  $user->createToken('memberAPI')->accessToken;
+            return response()->json($result, 200);
         } else {
             return response()->json(['error'=>'이메일주소 또는 비밀번호를 확인해주세요'], 401);
         }
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/signout",
+     *      tags={"회원"},
+     *      summary="로그아웃",
+     *      description="로그아웃 API",
+     *      security={ {"bearer_token": {} }},
+     *      @OA\Response(
+     *          response=200,
+     *          description="로그아웃 메시지를 반환합니다.",
+     *          @OA\JsonContent(ref="#/components/schemas/ResponseSignout")
+     *      )
+     * )
+     */
     /**
      * Signout api
      *
@@ -143,21 +162,76 @@ class UserController extends Controller
         $accessToken = $user->token();
         $accessToken->revoke();
         $accessToken->delete();
-        $success['message'] = '로그아웃 되었습니다.';
-        return response()->json(['success'=>$success], 200);
+        $result['message'] = '로그아웃 되었습니다.';
+        return response()->json($result, 200);
     }
 
     /**
-     * Details api
+     * @OA\Get(
+     *      path="/api/users/details",
+     *      tags={"회원"},
+     *      summary="회원 상세정보 조회",
+     *      description="회원 상세정보 조회 API",
+     *      security={ {"bearer_token": {} }},
+     *      @OA\Response(
+     *          response=200,
+     *          description="로그인한 회원정보를 반환합니다.",
+     *          @OA\JsonContent(ref="#/components/schemas/ResponseUsersDetails")
+     *      )
+     * )
+     */
+    /**
+     * Users details api
      *
      * @return \Illuminate\Http\Response
      */
     public function details() {
         $user = Auth::user();
-        $success['user'] = $user;
-        return response()->json(['success'=>$success], 200);
+        $result['user'] = $user;
+        return response()->json($result, 200);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/users",
+     *      tags={"회원"},
+     *      summary="회원목록",
+     *      description="회원목록 조회 API",
+     *      @OA\Response(
+     *          response=200,
+     *          description="회원목록을 반환합니다.",
+     *          @OA\JsonContent(ref="#/components/schemas/ResponseUsers")
+     *      )
+     * )
+     *
+     * @OA\Post(
+     *      path="/api/users",
+     *      tags={"회원"},
+     *      summary="회원목록",
+     *      description="회원목록 조회 API",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/RequestUsers")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="이름, 이메일로 검색한 회원정보를 반환합니다.",
+     *          @OA\JsonContent(ref="#/components/schemas/ResponseUsers")
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="정규식에 맞지 않는 필드명과 오류메시지를 반환합니다.",
+     *          @OA\JsonContent(ref="#/components/schemas/ResponseUsersInvalidData")
+     *      )
+     * )
+     */
+    /**
+     * Users list api
+     *
+     * @param  [string] name
+     * @param  [string] email
+     * @return \Illuminate\Http\Response
+     */
     public function list(Request $request) {
         $input = $request->all();
         $rules = [
@@ -170,7 +244,7 @@ class UserController extends Controller
         ];
         $validator = Validator::make($input, $rules, $message);
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error'=>$validator->errors()], 400);
         }
 
         if (!empty($input['name']) && !empty($input['email'])) {

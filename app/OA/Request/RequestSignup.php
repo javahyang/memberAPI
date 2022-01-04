@@ -5,7 +5,7 @@ namespace App\OA\Request;
 /**
  * @OA\Schema(
  *      title="Request Signup",
- *      description="회원가입 입력 데이터",
+ *      description="회원가입 요청 데이터",
  *      type="object",
  *      required={"name", "email", "password", "c_password", "nickname", "phone_number"}
  * )

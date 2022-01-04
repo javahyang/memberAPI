@@ -4,8 +4,8 @@ namespace App\OA\Response;
 
 /**
  * @OA\Schema(
- *      title="Regex Messages",
- *      description="회원가입 입력 정규식 오류메시지 배열",
+ *      title="Response Regex Messages",
+ *      description="회원가입 요청값 정규식 오류메시지 배열",
  *      type="object"
  * )
  */
