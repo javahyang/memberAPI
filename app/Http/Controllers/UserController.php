@@ -197,6 +197,17 @@ class UserController extends Controller
      *      tags={"회원"},
      *      summary="회원목록",
      *      description="회원목록 조회 API",
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="페이지네이션의 페이지 넘버",
+     *          required=false,
+     *          @OA\Schema(
+     *              type="integer",
+     *              format="int64"
+     *          ),
+     *          example=1
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="회원목록을 반환합니다.",
