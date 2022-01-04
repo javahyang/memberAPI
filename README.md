@@ -46,7 +46,7 @@
      - 주문목록(`orders` 테이블)의 이메일주소는 임의의 값입니다. `회원 주문목록 조회`, `전체회원 조회`, `회원 이름/이메일 검색` 을 위해 회원가입한 이메일주소로 `orders` 테이블의 `email` 필드를 수정해야 정상적으로 API 테스트가 가능합니다. 📢
 
 ## API 기능
- - **[API Doc](http://localhost/api/documentation)**
+ - **[API Documentation](http://localhost/api/documentation)**
  - 참고: 인증값 설정
    - Bearer {token}
     <img width="1452" alt="set-bearer" src="https://user-images.githubusercontent.com/77231082/148055808-1132c910-4ac0-47fd-a312-7f4b8600865d.png">
