@@ -64,11 +64,10 @@
  - 회원 주문목록 조회
     ![api:orders:details](https://user-images.githubusercontent.com/77231082/148054815-3ee1428b-5871-4caa-81d0-407a01dfa0ef.png)
 
- - 전체회원 조회
-    - 페이지네이션 적용
+ - 전체회원 조회(페이지네이션 적용)
     ![GET  api:users](https://user-images.githubusercontent.com/77231082/148054981-7d672234-c86d-48ea-804f-439e86dd2d97.png)
     
-    - 이름, 이메일 검색
+ - 회원 이름, 이메일 검색
     ![POST  api:users](https://user-images.githubusercontent.com/77231082/148055388-025c4776-bd43-4eed-b99c-d78a03837745.png)
 
  - 로그아웃

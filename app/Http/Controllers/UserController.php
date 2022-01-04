@@ -142,7 +142,7 @@ class UserController extends Controller
      * @OA\Get(
      *      path="/api/users/details",
      *      tags={"회원"},
-     *      summary="회원 상세정보 조회",
+     *      summary="회원 상세정보",
      *      description="회원 상세정보 조회 API",
      *      security={ {"bearer_token": {} }},
      *      @OA\Response(
@@ -186,12 +186,22 @@ class UserController extends Controller
      *          @OA\JsonContent(ref="#/components/schemas/ResponseUsers")
      *      )
      * )
+     */
+    /**
+     * Users list api
      *
+     * @return \Illuminate\Http\Response
+     */
+    public function list() {
+        return UserResource::collection(User::paginate(config('app.per_page')));
+    }
+
+    /**
      * @OA\Post(
-     *      path="/api/users",
+     *      path="/api/users/search",
      *      tags={"회원"},
-     *      summary="회원목록",
-     *      description="회원목록 조회 API",
+     *      summary="회원검색",
+     *      description="회원검색(이름, 이메일) API",
      *      @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(ref="#/components/schemas/RequestUsers")
@@ -209,13 +219,13 @@ class UserController extends Controller
      * )
      */
     /**
-     * Users list api
+     * Search api
      *
      * @param  [string] name
      * @param  [string] email
      * @return \Illuminate\Http\Response
      */
-    public function list(Request $request) {
+    public function search(Request $request) {
         $input = $request->all();
         $rules = [
             'name' => ['nullable', 'regex:/^[가-힣|a-z|A-Z]+$/'],
@@ -236,11 +246,9 @@ class UserController extends Controller
                 ['email', '=', $input['email']]
             ])->get());
         } else if (!empty($input['name'])) {
-            return UserResource::collection(User::where('name',$input['name'])->get());
+            return UserResource::collection(User::where('name', 'like', $input['name'].'%')->get());
         } else if (!empty($input['email'])) {
-            return UserResource::collection(User::where('email',$input['email'])->get());
-        } else {
-            return UserResource::collection(User::paginate(config('app.per_page')));
+            return UserResource::collection(User::where('email', $input['email'])->get());
         }
     }
 
