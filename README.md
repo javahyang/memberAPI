@@ -1,6 +1,6 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
-‼️ `.env` 파일은 `.gitignore` 파일에 포함하는 것이 원칙이나, 샘플프로젝트이므로 현재 레포지토리에 업로드하였습니다.
+‼️ `.env` 파일은 `.gitignore` 파일에 포함하는 것이 원칙이나, 샘플프로젝트이므로 본 레포지토리에 업로드하였습니다.
 
 ## 실행환경
 
@@ -68,7 +68,7 @@
     ![GET  api:users](https://user-images.githubusercontent.com/77231082/148054981-7d672234-c86d-48ea-804f-439e86dd2d97.png)
     
  - 회원 이름, 이메일 검색
-    ![POST  api:users](https://user-images.githubusercontent.com/77231082/148055388-025c4776-bd43-4eed-b99c-d78a03837745.png)
+    ![api:users:search](https://user-images.githubusercontent.com/77231082/148060340-56e27612-25ba-4f86-861d-8298825b4fa8.png)
 
  - 로그아웃
     ![api:signout](https://user-images.githubusercontent.com/77231082/148054052-c8e39594-27e3-4b9e-b7c2-1293cb4ac593.png)
