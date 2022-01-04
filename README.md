@@ -4,6 +4,7 @@
 
 ## 실행환경
 
+- PHP 7.4
 - [Docker](https://docs.docker.com/engine/install/)
 
 
@@ -13,7 +14,11 @@
         git clone https://github.com/javahyang/memberAPI.git
     ```
 2. 레포지토리 폴더 위치로 이동
-3. `memberAPI` 프로젝트 실행
+3. `composer` 설치
+    ```bash
+        composer install
+    ```
+4. `memberAPI` 프로젝트 실행
     ```bash
         ## laravel sail 프로젝트 실행
         ./vendor/bin/sail up
@@ -22,19 +27,19 @@
         alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
         sail up
     ```
-4. `docker` 에 `composer` 설치
+5. `docker` 에 `composer` 설치
     ```bash
         sail composer install
     ```
-5. 인증을 위한 `passport` 클라이언트 생성
+6. 인증을 위한 `passport` 클라이언트 생성
     ```bash
         sail artisan passport:install
     ```
-6. 데이터베이스 마이그레이션
+7. 데이터베이스 마이그레이션
     ```bash
         sail artisan migrate
     ```
-7. 주문목록 API 호출 테스트를 위한 테스트데이터 입력
+8. 주문목록 API 호출 테스트를 위한 테스트데이터 입력
     ```bash
         sail artisan db:seed
     ```
@@ -43,6 +48,7 @@
 ## API 기능
  - **[API Doc](http://localhost/api/documentation)**
  - 참고: 인증값 설정
+   - Bearer {token}
     <img width="1452" alt="set-bearer" src="https://user-images.githubusercontent.com/77231082/148055808-1132c910-4ac0-47fd-a312-7f4b8600865d.png">
 
 
@@ -51,9 +57,6 @@
 
  - 로그인
     ![api:signin](https://user-images.githubusercontent.com/77231082/148053779-58033b6d-5b15-4c9b-bed5-d66138a58a3d.png)
-
- - 로그아웃
-    ![api:signout](https://user-images.githubusercontent.com/77231082/148054052-c8e39594-27e3-4b9e-b7c2-1293cb4ac593.png)
 
  - 회원 상세정보 조회
     ![api:users:details](https://user-images.githubusercontent.com/77231082/148055115-fb77571d-01c2-413b-8f93-04ae5defaa98.png)
@@ -67,3 +70,6 @@
     
     - 이름, 이메일 검색
     ![POST  api:users](https://user-images.githubusercontent.com/77231082/148055388-025c4776-bd43-4eed-b99c-d78a03837745.png)
+
+ - 로그아웃
+    ![api:signout](https://user-images.githubusercontent.com/77231082/148054052-c8e39594-27e3-4b9e-b7c2-1293cb4ac593.png)

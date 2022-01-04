@@ -140,34 +140,6 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *      path="/api/signout",
-     *      tags={"회원"},
-     *      summary="로그아웃",
-     *      description="로그아웃 API",
-     *      security={ {"bearer_token": {} }},
-     *      @OA\Response(
-     *          response=200,
-     *          description="로그아웃 메시지를 반환합니다.",
-     *          @OA\JsonContent(ref="#/components/schemas/ResponseSignout")
-     *      )
-     * )
-     */
-    /**
-     * Signout api
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function signout() {
-        $user = Auth::user();
-        $accessToken = $user->token();
-        $accessToken->revoke();
-        $accessToken->delete();
-        $result['message'] = '로그아웃 되었습니다.';
-        return response()->json($result, 200);
-    }
-
-    /**
-     * @OA\Get(
      *      path="/api/users/details",
      *      tags={"회원"},
      *      summary="회원 상세정보 조회",
@@ -270,5 +242,33 @@ class UserController extends Controller
         } else {
             return UserResource::collection(User::paginate(config('app.per_page')));
         }
+    }
+
+    /**
+     * @OA\Get(
+     *      path="/api/signout",
+     *      tags={"회원"},
+     *      summary="로그아웃",
+     *      description="로그아웃 API",
+     *      security={ {"bearer_token": {} }},
+     *      @OA\Response(
+     *          response=200,
+     *          description="로그아웃 메시지를 반환합니다.",
+     *          @OA\JsonContent(ref="#/components/schemas/ResponseSignout")
+     *      )
+     * )
+     */
+    /**
+     * Signout api
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function signout() {
+        $user = Auth::user();
+        $accessToken = $user->token();
+        $accessToken->revoke();
+        $accessToken->delete();
+        $result['message'] = '로그아웃 되었습니다.';
+        return response()->json($result, 200);
     }
 }
