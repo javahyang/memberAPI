@@ -21,7 +21,7 @@ class OrderFactory extends Factory
         return [
             'email' => $this->faker->safeEmail,
             'order_number' => Str::upper(Str::random(12)),
-            'product_name' => Str::of($this->faker->name)->append($random_emoji),
+            'product_name' => Str::of($this->faker->word())->append($random_emoji),
             'paid_at' => $this->faker->dateTime('now', 'UTC'),
         ];
     }
