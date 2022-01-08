@@ -33,7 +33,7 @@ class OrderController extends Controller
         $email = $user->email;
         $result['user'] = $user;
         $result['orders'] = Order::where('email', $email)
-                                ->orderBy('paid_at', 'desc')
+                                ->latest('paid_at')
                                 ->get();
         return response()->json($result, 200);
     }

@@ -245,9 +245,9 @@ class UserController extends Controller
                 ['name', '=', $input['name']],
                 ['email', '=', $input['email']]
             ])->get());
-        } else if (!empty($input['name'])) {
+        } elseif (!empty($input['name'])) {
             return UserResource::collection(User::where('name', 'like', $input['name'].'%')->get());
-        } else if (!empty($input['email'])) {
+        } elseif (!empty($input['email'])) {
             return UserResource::collection(User::where('email', $input['email'])->get());
         }
     }
