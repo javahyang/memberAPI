@@ -7,6 +7,7 @@ use App\Http\Resources\User as UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Validator;
 
 class UserController extends Controller
@@ -240,14 +241,18 @@ class UserController extends Controller
             return response()->json(['error'=>$validator->errors()], 400);
         }
 
-        if (!empty($input['name']) && !empty($input['email'])) {
+        if (Str::of($input['name'])->isEmpty() && Str::of($input['email'])->isEmpty()) {
+            $error['name'] = ['이름은 한글, 영어 대문자/소문자 로 입력해주세요'];
+            $error['email'] = ['이메일형식을 확인해주세요'];
+            return response()->json(['error'=>$error], 400);
+        } elseif (Str::of($input['name'])->isNotEmpty() && Str::of($input['email'])->isNotEmpty()) {
             return UserResource::collection(User::where([
                 ['name', '=', $input['name']],
                 ['email', '=', $input['email']]
             ])->get());
-        } elseif (!empty($input['name'])) {
+        } elseif (Str::of($input['name'])->isNotEmpty()) {
             return UserResource::collection(User::where('name', 'like', $input['name'].'%')->get());
-        } elseif (!empty($input['email'])) {
+        } elseif (Str::of($input['email'])->isNotEmpty()) {
             return UserResource::collection(User::where('email', $input['email'])->get());
         }
     }
