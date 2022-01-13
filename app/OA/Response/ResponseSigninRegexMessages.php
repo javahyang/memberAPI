@@ -18,7 +18,7 @@ namespace App\OA\Response;
      *      description="이메일 정규식 오류메시지",
      *      @OA\Items(
      *          type="string",
-     *          example="이메일형식을 확인해주세요"
+     *          example="이메일을 입력해주세요"
      *      )
      * )
      *
@@ -32,7 +32,7 @@ namespace App\OA\Response;
      *      description="비밀번호 정규식 오류메시지",
      *      @OA\Items(
      *          type="string",
-     *          example="비밀번호는 영어 대문자, 소문자, 특수문자(@^$!%*?&), 숫자가 각 1회 이상씩 포함된 10자리 이상이어야 합니다."
+     *          example="비밀번호를 입력해주세요"
      *      )
      * )
      *
