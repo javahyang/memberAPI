@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Http\Resources\User as UserResource;
+use App\Http\Requests\SignupRequest;
+use App\Http\Requests\SigninRequest;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Validator;
@@ -46,31 +47,8 @@ class UserController extends Controller
      * @param  [string] gender
      * @return \Illuminate\Http\Response
      */
-    public function signup(Request $request) {
+    public function signup(SignupRequest $request) {
         $input = $request->all();
-        $rules = [
-            'name' => ['required', 'regex:/^[가-힣|a-z|A-Z]+$/'],
-            'email' => ['required', 'email:filter'],
-            'password' => ['required', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@^$!%*?&])[A-Za-z\d@^$!%*?&]{10,}$/'],
-            'c_password' => ['required', 'same:password'],
-            'nickname' => ['required', 'regex:/^[a-z]+$/'],
-            'phone_number' => ['required', 'numeric'],
-            'gender' => [Rule::in(['M', 'F'])],
-        ];
-        $message = [
-            'name.regex' => '이름은 한글, 영어 대문자/소문자 로 입력해주세요',
-            'email.email' => '이메일형식을 확인해주세요',
-            'password.regex' => '비밀번호는 영어 대문자, 소문자, 특수문자(@^$!%*?&), 숫자가 각 1회 이상씩 포함된 10자리 이상이어야 합니다.',
-            'c_password.same' => '동일한 비밀번호를 입력해주세요',
-            'nickname.regex' => '닉네임은 영어 소문자 로 입력해주세요',
-            'phone_number.numeric' => '전화번호는 숫자만 입력해주세요',
-            'gender.in' => '올바른 타입을 입력해주세요: 남성(M), 여성(F)'
-        ];
-        $validator = Validator::make($input, $rules, $message);
-        if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 400);
-        }
-
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $result['token'] = $user->createToken('memberAPI')->accessToken;
@@ -112,21 +90,8 @@ class UserController extends Controller
      * @param  [string] password
      * @return \Illuminate\Http\Response
      */
-    public function signin(Request $request) {
+    public function signin(SigninRequest $request) {
         $input = $request->all();
-        $rules = [
-            'email' => ['required'],
-            'password' => ['required'],
-        ];
-        $message = [
-            'email.required' => '이메일을 입력해주세요',
-            'password.required' => '비밀번호를 입력해주세요',
-        ];
-        $validator = Validator::make($input, $rules, $message);
-        if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 400);
-        }
-
         if (Auth::attempt([
             'email' => $input['email'],
             'password' => $input['password']
