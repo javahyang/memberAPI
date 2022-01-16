@@ -23,4 +23,4 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('orders/details', [OrderController::class, 'details']);
 });
 Route::get('users', [UserController::class, 'list']);
-Route::post('users/search', [UserController::class, 'search']);
+Route::get('users/search', [UserController::class, 'search']);

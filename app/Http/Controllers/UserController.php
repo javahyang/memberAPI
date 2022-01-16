@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Http\Resources\User as UserResource;
 use App\Http\Requests\SignupRequest;
 use App\Http\Requests\SigninRequest;
+use App\Http\Requests\SearchRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -163,15 +164,25 @@ class UserController extends Controller
     }
 
     /**
-     * @OA\Post(
+     * @OA\Get(
      *      path="/api/users/search",
      *      tags={"회원"},
      *      summary="회원검색",
      *      description="회원검색(이름, 이메일) API",
-     *      @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/RequestUsers")
-     *      ),
+     *      @OA\Parameter(
+     *        name="name",
+     *        in="query",
+     *        description="검색할 회원 이름(Full name) 또는 성씨(Last name)",
+     *        @OA\Schema(type="string"),
+     *        example="홍"
+     *     ),
+     *     @OA\Parameter(
+     *       name="email",
+     *       in="query",
+     *       description="검색할 회원 이메일",
+     *       @OA\Schema(type="string"),
+     *       example="gildong@test.com"
+     *     ),
      *      @OA\Response(
      *          response=200,
      *          description="이름, 이메일로 검색한 회원정보를 반환합니다.",
@@ -191,34 +202,25 @@ class UserController extends Controller
      * @param  [string] email
      * @return \Illuminate\Http\Response
      */
-    public function search(Request $request) {
+    public function search(SearchRequest $request) {
         $input = $request->all();
-        $rules = [
-            'name' => ['nullable', 'regex:/^[가-힣|a-z|A-Z]+$/'],
-            'email' => ['nullable', 'email:filter'],
-        ];
-        $message = [
-            'name.regex' => '이름은 한글, 영어 대문자/소문자 로 입력해주세요',
-            'email.email' => '이메일형식을 확인해주세요',
-        ];
-        $validator = Validator::make($input, $rules, $message);
-        if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 400);
-        }
 
-        if (Str::of($input['name'])->isEmpty() && Str::of($input['email'])->isEmpty()) {
+        $name = $input['name'] ?? '';
+        $email = $input['email'] ?? '';
+
+        if (Str::of($name)->isEmpty() && Str::of($email)->isEmpty()) {
             $error['name'] = ['이름은 한글, 영어 대문자/소문자 로 입력해주세요'];
             $error['email'] = ['이메일형식을 확인해주세요'];
             return response()->json(['error'=>$error], 400);
-        } elseif (Str::of($input['name'])->isNotEmpty() && Str::of($input['email'])->isNotEmpty()) {
+        } elseif (Str::of($name)->isNotEmpty() && Str::of($email)->isNotEmpty()) {
             return UserResource::collection(User::where([
-                ['name', '=', $input['name']],
-                ['email', '=', $input['email']]
+                ['name', '=', $name],
+                ['email', '=', $email]
             ])->get());
-        } elseif (Str::of($input['name'])->isNotEmpty()) {
-            return UserResource::collection(User::where('name', 'like', $input['name'].'%')->get());
-        } elseif (Str::of($input['email'])->isNotEmpty()) {
-            return UserResource::collection(User::where('email', $input['email'])->get());
+        } elseif (Str::of($name)->isNotEmpty()) {
+            return UserResource::collection(User::where('name', 'like', $name.'%')->get());
+        } elseif (Str::of($email)->isNotEmpty()) {
+            return UserResource::collection(User::where('email', $email)->get());
         }
     }
 

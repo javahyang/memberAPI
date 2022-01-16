@@ -198,22 +198,32 @@
             }
         },
         "/api/users/search": {
-            "post": {
+            "get": {
                 "tags": [
                     "회원"
                 ],
                 "summary": "회원검색",
                 "description": "회원검색(이름, 이메일) API",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/RequestUsers"
-                            }
-                        }
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "검색할 회원 이름(Full name) 또는 성씨(Last name)",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "홍"
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "검색할 회원 이메일",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "gildong@test.com"
                     }
-                },
+                ],
                 "responses": {
                     "200": {
                         "description": "이름, 이메일로 검색한 회원정보를 반환합니다.",
